@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace OptionsPattern.API.Controllers
 {
@@ -9,27 +10,23 @@ namespace OptionsPattern.API.Controllers
     {
 
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly WeatherOptions _weatherOptions;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration configuration)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IOptions<WeatherOptions> weatherOptions)
         {
             _logger = logger;
-            _configuration = configuration;
+            _weatherOptions = weatherOptions.Value;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IActionResult  Get()
         {
-            var city = _configuration.GetValue<string>("WeatherOptions:City");
-            var state = _configuration.GetValue<string>("WeatherOptions:State");
-            var temperature = _configuration.GetValue<int>("WeatherOptions:Temperature");
-            var summary = _configuration.GetValue<string>("WeatherOptions:Summary");
             return Ok(new
             {
-                City = city,
-                State = state,
-                Temperature = temperature,
-                Summary = summary
+                _weatherOptions.City,
+                _weatherOptions.State,
+                _weatherOptions.Temperature,
+                _weatherOptions.Summary
             });
         }
     }

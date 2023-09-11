@@ -1,6 +1,12 @@
+using OptionsPattern.API;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+//Ioptions pattern 
+
+builder.Services.AddOptions<WeatherOptions>().BindConfiguration(nameof(WeatherOptions)).ValidateDataAnnotations();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
